@@ -8,8 +8,14 @@ module.exports = {
   theme: {
     extend: {
          colors: {
-          primary: "#202225",
-          secondary: "hsla(330, 46%, 73%, 1)",
+          primary: "#f43474",
+          secondary: "#f7e8c0",
+          'text': '#fafaf5',
+          'paper': '#fafaf505',
+          'background': '#111108',
+          'primary-button': '#f43474',
+          'secondary-button': '#f7e8c0',
+          'accent': '#3463e5',
         },
         animation:{
           blob1: "blob 7s 3.5s infinite",
