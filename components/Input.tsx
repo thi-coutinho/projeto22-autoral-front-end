@@ -1,28 +1,32 @@
 import { TextField } from "@mui/material";
-import { StyledEngineProvider } from "@mui/material";
+import { Dispatch, SetStateAction } from "react";
 
 interface inputProps {
   className?: string;
   type?: "email" | "password";
   label: string;
+  value: string;
+  color?: "success" | "warning" | "info" | "error" | "primary" | "secondary";
+  setValue: Dispatch<SetStateAction<string>>;
 }
 
-export default function Input(props: inputProps) {
+export default function Input<T>(props: inputProps) {
   return (
-    <StyledEngineProvider injectFirst>
-      <TextField
-        label={props.label}
-        variant="filled"
-        type={props.type || "text"}
-        required
-        sx={{
-          "& .MuiInputBase-input": {
-            color: "white",
-            borderRadius: "1px",
-          },
-        }}
-        fullWidth
-      ></TextField>
-    </StyledEngineProvider>
+    <TextField
+      label={props.label}
+      variant="filled"
+      type={props.type || "text"}
+      value={props.value}
+      color={props.color ?? "primary"}
+      onChange={(e) => props.setValue(e.target.value)}
+      required
+      sx={{
+        "& .MuiInputBase-input": {
+          color: "white",
+          borderRadius: "1px",
+        },
+      }}
+      fullWidth
+    ></TextField>
   );
 }
