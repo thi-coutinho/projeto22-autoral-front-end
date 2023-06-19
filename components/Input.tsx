@@ -19,6 +19,8 @@ export default function Input<T>(props: inputProps) {
       value={props.value}
       color={props.color ?? "primary"}
       onChange={(e) => props.setValue(e.target.value)}
+      helperText="Digite aqui"
+      autoFocus={true}
       required
       sx={{
         "& .MuiInputBase-input": {
