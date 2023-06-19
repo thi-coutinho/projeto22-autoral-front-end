@@ -4,21 +4,24 @@ import Input from "@/components/Input";
 import SnackAlert from "@/components/SnackAlert";
 import { Button } from "@mui/material";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { signIn } from "@/services/authApi";
 import { useRouter } from "next/navigation";
+import UserContext from "@/contexts/UserContext";
 
 export default function Signin() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [alert, setAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const { setUserData } = useContext(UserContext);
   const router = useRouter();
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
       const userData = await signIn(email, password);
+      setUserData(userData);
       setAlertMessage("Login com sucesso");
       router.push("/dashboard");
     } catch (err) {

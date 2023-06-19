@@ -19,6 +19,13 @@ export const themeOptions = createTheme({
     },
   },
   components: {
+    MuiFab: {
+      styleOverrides: {
+        sizeSmall: {
+          minHeight: "16px",
+        },
+      },
+    },
     MuiFilledInput: {
       styleOverrides: {
         root: {

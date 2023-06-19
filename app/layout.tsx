@@ -1,4 +1,5 @@
 import ThemeProvider from "@/providers/ThemeProvider";
+import { UserProvider } from "@/contexts/UserContext";
 import "./globals.css";
 import { Libre_Baskerville } from "next/font/google";
 
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <UserProvider>{children}</UserProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
