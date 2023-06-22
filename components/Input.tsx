@@ -6,6 +6,7 @@ interface inputProps {
   type?: "email" | "password";
   label: string;
   value: string;
+  multiline?: boolean;
   color?: "success" | "warning" | "info" | "error" | "primary" | "secondary";
   setValue: Dispatch<SetStateAction<string>>;
 }
@@ -21,6 +22,7 @@ export default function Input<T>(props: inputProps) {
       onChange={(e) => props.setValue(e.target.value)}
       helperText="Digite aqui"
       autoFocus={true}
+      multiline={props.multiline ?? false}
       required
       sx={{
         "& .MuiInputBase-input": {

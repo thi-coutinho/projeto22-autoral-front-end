@@ -13,6 +13,7 @@ type IdeiaProps = {
   top: number;
   left: number;
   text: string;
+  id: number;
   setIdeias: Dispatch<SetStateAction<Iideia[]>>;
 };
 import ClickAwayListener from "@mui/base/ClickAwayListener";
@@ -43,18 +44,26 @@ export default function Ideia(ideia: IdeiaProps) {
   }
 
   function createIdeia<T>(e: KeyboardEvent<T>) {
-    if (e.key === "Enter") setEditText((e) => !e);
+    if (e.key === "Enter" && !e.shiftKey) {
+      setText((prev) => prev.slice(0, -1));
+      setEditText((e) => !e);
+    }
     if (e.key === "Escape") {
       setText((e) => e);
       setEditText((e) => !e);
+      if (text === "") {
+        ideia.setIdeias((prev) =>
+          prev.filter((item, index) => index !== ideia.id)
+        );
+      }
     }
   }
 
   return (
     <Zoom in>
       <div
-        className={`absolute z-10 bg-primary p-4 rounded-xl`}
-        draggable={"true"}
+        className={`absolute z-10 bg-primary p-4 rounded-xl hover:resize whitespace-pre-wrap`}
+        draggable
         style={{ top: `${top}px`, left: `${left}px` }}
         onClick={(e) => stopBubble(e)}
         onContextMenu={stopBubble}
@@ -64,12 +73,11 @@ export default function Ideia(ideia: IdeiaProps) {
       >
         {text === "" || editText ? (
           <Input
-            label={
-              text.split(" ").length > 3 ? "Digite sua palavra" : "Max 3 words"
-            }
+            label={text.split(" ").length > 3 ? "Máx 3 palavras" : "Digite"}
             value={text}
+            multiline
             setValue={setText}
-            color={text.split(" ").length > 3 ? "error" : "primary"}
+            color={text.split(" ").length > 3 ? "warning" : "primary"}
           />
         ) : (
           text

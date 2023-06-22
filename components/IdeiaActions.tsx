@@ -27,7 +27,7 @@ export default function IdeiaActions({
   async function createNewIdeias(e: MouseEvent) {
     e.stopPropagation();
     const objective =
-      "criar o layout de website de e-commerce especializado em  smartphones";
+      "criar o layout de website de e-commerce especializado em smartphones";
     let text1, text2, text3;
     try {
       const newIdeas = await expandIdeia(

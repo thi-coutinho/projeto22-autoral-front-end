@@ -3,6 +3,7 @@ import Ideia from "@/components/Ideia";
 import { MouseEvent, useContext, useEffect, useState } from "react";
 import { Zoom } from "@mui/material";
 import UserContext from "@/contexts/UserContext";
+import ToolBox from "@/components/ToolBox";
 
 export type Iideia = {
   left: number;
@@ -10,8 +11,12 @@ export type Iideia = {
   text: string;
 };
 
+export type IElement = "Box" | "Text" | "Line" | "Arrow" | "None";
+
 export default function Dashboard() {
   const [ideias, setIdeias] = useState<Iideia[]>([]);
+  const [element, setElement] = useState<IElement>("Box");
+
   const { userData } = useContext(UserContext);
   useEffect(() => {
     console.log(userData);
@@ -25,16 +30,18 @@ export default function Dashboard() {
 
   return (
     <div
-      className="w-full h-full overflow-auto bg-slate-500 ml-28 rounded-3xl p-8 relative"
+      className="w-full h-full overflow-auto bg-slate-500 rounded-3xl p-8 relative"
       onClick={(e) => createIdeia(e)}
     >
-      <div className="bg-transparent min-h-full min-w-full p-32">
+      <ToolBox element={element} setElement={setElement} />
+      <div className="bg-transparent min-h-full min-w-full w-fit h-fit">
         {ideias.map((ideia, i) => (
           <Ideia
             left={ideia.left}
             top={ideia.top}
             text={ideia.text}
             key={i}
+            id={i}
             setIdeias={setIdeias}
           />
         ))}

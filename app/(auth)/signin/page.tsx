@@ -8,6 +8,8 @@ import { FormEvent, useContext, useState } from "react";
 import { signIn } from "@/services/authApi";
 import { useRouter } from "next/navigation";
 import UserContext from "@/contexts/UserContext";
+import { ApiError } from "next/dist/server/api-utils";
+import { AxiosError } from "axios";
 
 export default function Signin() {
   const [password, setPassword] = useState("");
@@ -25,7 +27,9 @@ export default function Signin() {
       setAlertMessage("Login com sucesso");
       router.push("/dashboard");
     } catch (err) {
-      setAlertMessage("Não foi possível fazer o login!");
+      if (err instanceof AxiosError && err.response?.status === 401) {
+        setAlertMessage("Senha e/ou email incorreto(s)!");
+      } else setAlertMessage("Erro no servidor! tente novamente mais tarde");
     } finally {
       setAlert(true);
     }
