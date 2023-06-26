@@ -11,7 +11,7 @@ export default function Logo({ size }: props) {
   };
   return (
     <h1
-      className={`font-extrabold tracking-wider text-transparent ${variants[size]} bg-clip-text bg-gradient-to-r from-accent to-primary`}
+      className={`font-extrabold tracking-wider select-none text-transparent ${variants[size]} bg-clip-text bg-gradient-to-r from-accent to-primary`}
     >
       brAIn pal
     </h1>

@@ -11,17 +11,17 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { MouseEvent, useState } from "react";
 import Logo from "./Logo";
+import { useRouter } from "next/navigation";
 
-const pages = ["Projects"];
+const pages = [{ title: "Projects", path: "/dashboard" }];
 const settings = ["Profile", "Logout"];
 
 export default function TopMenu() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-
+  const router = useRouter();
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -29,8 +29,9 @@ export default function TopMenu() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (args: { path?: string }) => {
     setAnchorElNav(null);
+    if (args.path) router.push(args.path);
   };
 
   const handleCloseUserMenu = () => {
@@ -70,22 +71,25 @@ export default function TopMenu() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+              {pages.map(({ title, path }) => (
+                <MenuItem
+                  key={title}
+                  onClick={() => handleCloseNavMenu({ path })}
+                >
+                  <Typography textAlign="center">{title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
           <Logo size="small" />
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pages.map(({ title, path }) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={title}
+                onClick={() => handleCloseNavMenu({ path })}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {title}
               </Button>
             ))}
           </Box>
