@@ -1,37 +1,47 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import SnackAlert from "./SnackAlert";
 import Input from "./Input";
 import { Button } from "@mui/material";
 import projectApi, { IbodyCreateProject } from "@/services/projectApi";
 import useToken from "@/hooks/useToken";
+import { useSetRefresh } from "@/hooks/useRefresh";
 type props = {
-  redirect: (projectId: string) => Promise<boolean>;
+  projectName?: string;
+  projectObjective?: string;
+  projectImageURL?: string;
+  id?: number;
+  handleClose: () => void;
 };
-export default function CreateProjectForm() {
-  const [name, setName] = useState("");
-  const [objective, setObjective] = useState("");
-  const [imageURL, setImageURL] = useState("");
+export default function CreateProjectForm(projectProps: props) {
+  const [name, setName] = useState(projectProps.projectName ?? "");
+  const [objective, setObjective] = useState(
+    projectProps.projectObjective ?? ""
+  );
+  const [imageURL, setImageURL] = useState(projectProps.projectImageURL ?? "");
   const [alert, setAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const router = useRouter();
   const token = useToken();
+  const setRefresh = useSetRefresh();
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     try {
-      const body: IbodyCreateProject = { name };
+      const body: IbodyCreateProject & { id?: number } = { name };
       if (imageURL) body.imageURL = imageURL;
       if (objective) body.objective = objective;
+      if (projectProps.id) body.id = projectProps.id;
       const project = await projectApi.createProject(body, token);
-      setAlertMessage("Project created!");
-      router.push(`/dashboard/${project.id}`);
+      if (projectProps.id) setAlertMessage("Project updated!");
+      else setAlertMessage("Project created!");
+      setRefresh((prev) => !prev);
     } catch (err) {
       setAlertMessage("Something went wrong");
     } finally {
       setAlert(true);
+      projectProps.handleClose();
     }
   }
 
@@ -40,7 +50,9 @@ export default function CreateProjectForm() {
       <SnackAlert
         message={alertMessage}
         setShow={setAlert}
-        severity={alertMessage === "Project created" ? "success" : "warning"}
+        severity={
+          alertMessage === "Something went wrong" ? "warning" : "success"
+        }
         show={alert}
         key={alertMessage}
       />
@@ -68,7 +80,7 @@ export default function CreateProjectForm() {
           optional
         />
         <Button variant="contained" type="submit">
-          Let`s begin creating!
+          {projectProps.id ? "Update Project" : "Let`s begin creating!"}
         </Button>
       </form>
     </div>

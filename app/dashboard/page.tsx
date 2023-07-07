@@ -3,6 +3,7 @@ import AddProjectCard from "@/components/AddProjectCard";
 import CreateProjectForm from "@/components/CreateProjectForm";
 import MenuModal from "@/components/MenuModal";
 import ProjectCard from "@/components/ProjectCard";
+import { useRefresh } from "@/hooks/useRefresh";
 import useToken from "@/hooks/useToken";
 import projectApi from "@/services/projectApi";
 import { useEffect, useState } from "react";
@@ -20,6 +21,7 @@ export default function Page() {
   const handleOpen = () => setOpenCreateProjectMenu(true);
   const handleClose = () => setOpenCreateProjectMenu(false);
   const [projects, setProjects] = useState<projectObject[]>([]);
+  const refresh = useRefresh();
   const token = useToken();
 
   useEffect(() => {
@@ -29,23 +31,27 @@ export default function Page() {
       setProjects(response);
     }
     getProjects();
-  }, [token]);
+  }, [token, refresh]);
 
   return (
-    <div className="bg-slate-800 w-full h-full px-8 pt-6 grid grid-cols-2 md:grid-cols-3 md:px-16 lg:grid-cols-4 lg:px-40 gap-5">
-      <AddProjectCard handleOpen={handleOpen} />
-      {projects.map((p) => (
-        <ProjectCard
-          key={p.id}
-          id={p.id}
-          createdAt={p.createdAt}
-          name={p.name}
-          objective={p.objective}
-        />
-      ))}
-      <MenuModal handleClose={handleClose} open={openCreateProjectMenu}>
-        <CreateProjectForm />
-      </MenuModal>
+    <div className="flex w-full min-h-fit grow">
+      <div className="bg-slate-800 w-full min-h-fit grow flex justify-center">
+        <div className=" w-fit h-fit py-6 gap-8 grid grid-cols-1 md:grid-cols-2 md:px-16 lg:grid-cols-3">
+          <AddProjectCard handleOpen={handleOpen} />
+          {projects.map((p) => (
+            <ProjectCard
+              key={p.id}
+              id={p.id}
+              createdAt={p.createdAt}
+              name={p.name}
+              objective={p.objective}
+            />
+          ))}
+          <MenuModal handleClose={handleClose} open={openCreateProjectMenu}>
+            <CreateProjectForm handleClose={handleClose} />
+          </MenuModal>
+        </div>
+      </div>
     </div>
   );
 }

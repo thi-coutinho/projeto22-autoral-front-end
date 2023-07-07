@@ -8,7 +8,6 @@ import { FormEvent, useContext, useState } from "react";
 import { signIn } from "@/services/authApi";
 import { useRouter } from "next/navigation";
 import UserContext from "@/contexts/UserContext";
-import { ApiError } from "next/dist/server/api-utils";
 import { AxiosError } from "axios";
 
 export default function Signin() {

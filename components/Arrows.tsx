@@ -1,7 +1,7 @@
 import { DragEvent, useState } from "react";
 import Arrow, { ArrowProps } from "./Arrow";
-import { IMousePositionOnCanvas } from "@/app/dashboard/page";
 import { Dispatch, SetStateAction } from "react";
+import { IMousePositionOnCanvas } from "@/app/dashboard/[projectId]/page";
 
 type props = {
   canCreate: boolean;

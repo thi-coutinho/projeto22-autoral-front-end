@@ -1,4 +1,4 @@
-import { IMousePositionOnCanvas } from "@/app/dashboard/page";
+import { IMousePositionOnCanvas } from "@/app/dashboard/[projectId]/page";
 import { Input } from "@mui/material";
 import { useState } from "react";
 import { Dispatch, SetStateAction } from "react";

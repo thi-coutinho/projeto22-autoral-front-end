@@ -39,7 +39,7 @@ export default function TopMenu() {
   };
 
   return (
-    <AppBar position="absolute">
+    <AppBar position="fixed">
       <Container>
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

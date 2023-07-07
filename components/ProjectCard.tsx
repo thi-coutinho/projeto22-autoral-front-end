@@ -1,8 +1,6 @@
 "use client";
-import * as React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
@@ -15,9 +13,12 @@ import PersonIcon from "@mui/icons-material/Person";
 import { CardActionArea } from "@mui/material";
 import { projectObject } from "@/app/dashboard/page";
 import Image from "next/image";
-import useToken from "@/hooks/useToken";
-import projectApi from "@/services/projectApi";
-import coverProject from "public/coverProject.jpg";
+import coverProjectSmall from "public/coverProjectSmall.jpg";
+import MenuModal from "./MenuModal";
+import { useState } from "react";
+import DeleteProjectModal from "./DeleteProjectModal";
+import CreateProjectForm from "./CreateProjectForm";
+import { useRouter } from "next/navigation";
 
 export default function ProjectCard({
   id,
@@ -26,15 +27,18 @@ export default function ProjectCard({
   imageURL,
   objective,
 }: projectObject) {
-  const date = new Date(createdAt);
-  const token = useToken();
+  const [openDeleteMenu, setOpenDeleteMenu] = useState(false);
+  const handleOpenDelete = () => setOpenDeleteMenu(true);
+  const handleCloseDelete = () => setOpenDeleteMenu(false);
+  const [openEditMenu, setOpenEditMenu] = useState(false);
+  const handleOpenEdit = () => setOpenEditMenu(true);
+  const handleCloseEdit = () => setOpenEditMenu(false);
 
-  async function deleteProject() {
-    await projectApi.deleteById(id, token);
-  }
+  const date = new Date(createdAt);
+  const router = useRouter();
 
   return (
-    <Card sx={{ maxWidth: 345 }} className="max-h-[300px]">
+    <Card sx={{ maxWidth: 345 }} className="h-[300px]">
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="Profile icon">
@@ -42,27 +46,41 @@ export default function ProjectCard({
           </Avatar>
         }
         title={name}
-        subheader={date.toLocaleDateString("pt-br", { dateStyle: "long" })}
+        subheader={date.toLocaleDateString("en", { dateStyle: "long" })}
       />
-      <CardActionArea>
+      <CardActionArea onClick={() => router.push(`/dashboard/${id}`)}>
         <Image
-          src={coverProject}
+          src={coverProjectSmall}
           alt="standard image"
           className="max-h-[100px] object-cover block"
         />
 
         <CardContent>
-          <Typography variant="body2">{objective}</Typography>
+          <Typography variant="body2" className="text-ellipsis line-clamp-2">
+            {objective}
+          </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
-        <IconButton aria-label="edit project">
+      <CardActions className="justify-end relative bottom-0">
+        <IconButton aria-label="edit project" onClick={handleOpenEdit}>
           <EditNoteIcon />
         </IconButton>
-        <IconButton aria-label="delete project" onClick={deleteProject}>
+        <IconButton aria-label="delete project" onClick={handleOpenDelete}>
           <DeleteIcon />
         </IconButton>
       </CardActions>
+      <MenuModal handleClose={handleCloseDelete} open={openDeleteMenu}>
+        <DeleteProjectModal projectId={id} handleClose={handleCloseDelete} />
+      </MenuModal>
+      <MenuModal handleClose={handleCloseEdit} open={openEditMenu}>
+        <CreateProjectForm
+          id={id}
+          projectImageURL={imageURL}
+          projectName={name}
+          projectObjective={objective}
+          handleClose={handleCloseEdit}
+        />
+      </MenuModal>
     </Card>
   );
 }

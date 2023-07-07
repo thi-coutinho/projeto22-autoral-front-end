@@ -54,41 +54,43 @@ export default function Dashboard() {
   }
 
   return (
-    <div
-      className="w-full h-full overflow-auto bg-slate-500 rounded-3xl relative"
-      onClick={(e) => createIdeia(e)}
-    >
-      <ToolBox
-        element={element}
-        setElement={setElement}
-        setFirstClick={setFirstClick}
-      />
+    <div className="flex w-full h-screen">
       <div
-        className="bg-transparent min-h-full min-w-full w-fit h-fit"
-        onMouseMove={(e) => handleMouseMouse(e)}
+        className="w-full h-full overflow-auto bg-slate-500 rounded-3xl relative"
+        onClick={(e) => createIdeia(e)}
       >
-        {ideias.map((ideia, i) => (
-          <Ideia
-            left={ideia.left}
-            top={ideia.top}
-            text={ideia.text}
-            key={i}
-            id={i}
-            setIdeias={setIdeias}
+        <ToolBox
+          element={element}
+          setElement={setElement}
+          setFirstClick={setFirstClick}
+        />
+        <div
+          className="bg-transparent min-h-full min-w-full w-fit h-fit"
+          onMouseMove={(e) => handleMouseMouse(e)}
+        >
+          {ideias.map((ideia, i) => (
+            <Ideia
+              left={ideia.left}
+              top={ideia.top}
+              text={ideia.text}
+              key={i}
+              id={i}
+              setIdeias={setIdeias}
+            />
+          ))}
+          <Texts
+            canCreate={element === "Text"}
+            firstClick={firstClick}
+            setFirstClick={setFirstClick}
           />
-        ))}
-        <Texts
-          canCreate={element === "Text"}
-          firstClick={firstClick}
-          setFirstClick={setFirstClick}
-        />
-        <Arrows
-          canCreate={element === "Arrow"}
-          currentMouse={currentMouse}
-          setCurrentMouse={setCurrentMouse}
-          firstClick={firstClick}
-          setFirstClick={setFirstClick}
-        />
+          <Arrows
+            canCreate={element === "Arrow"}
+            currentMouse={currentMouse}
+            setCurrentMouse={setCurrentMouse}
+            firstClick={firstClick}
+            setFirstClick={setFirstClick}
+          />
+        </div>
       </div>
     </div>
   );
