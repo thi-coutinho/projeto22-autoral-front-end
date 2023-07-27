@@ -1,20 +1,22 @@
-type Point = {
-  x: number;
-  y: number;
-};
-
 export type ArrowProps = {
-  startPoint: Point;
-  endPoint: Point;
+  startPointX: number;
+  startPointY: number;
+  endPointX: number;
+  endPointY: number;
 };
 
-export default function Arrow({ startPoint, endPoint }: ArrowProps) {
+export default function Arrow({
+  startPointX,
+  startPointY,
+  endPointX,
+  endPointY,
+}: ArrowProps) {
   const canvasStartPoint = {
-    x: Math.min(startPoint.x, endPoint.x),
-    y: Math.min(startPoint.y, endPoint.y),
+    x: Math.min(startPointX, endPointX),
+    y: Math.min(startPointY, endPointY),
   };
-  const canvasWidth = Math.abs(endPoint.x - startPoint.x);
-  const canvasHeight = Math.abs(endPoint.y - startPoint.y);
+  const canvasWidth = Math.abs(endPointX - startPointX);
+  const canvasHeight = Math.abs(endPointY - startPointY);
   const strokeWidth = 3;
   return (
     <svg
@@ -44,10 +46,10 @@ export default function Arrow({ startPoint, endPoint }: ArrowProps) {
       <line
         stroke="white"
         strokeWidth={strokeWidth}
-        x1={startPoint.x - canvasStartPoint.x}
-        y1={startPoint.y - canvasStartPoint.y}
-        x2={endPoint.x - canvasStartPoint.x}
-        y2={endPoint.y - canvasStartPoint.y}
+        x1={startPointX - canvasStartPoint.x}
+        y1={startPointY - canvasStartPoint.y}
+        x2={endPointX - canvasStartPoint.x}
+        y2={endPointY - canvasStartPoint.y}
         markerEnd="url(#arrow)"
       />
     </svg>

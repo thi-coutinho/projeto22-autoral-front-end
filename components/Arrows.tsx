@@ -2,6 +2,8 @@ import { DragEvent, useState } from "react";
 import Arrow, { ArrowProps } from "./Arrow";
 import { Dispatch, SetStateAction } from "react";
 import { IMousePositionOnCanvas } from "@/app/dashboard/[projectId]/page";
+import { useSaveArrowPool } from "@/hooks/useSavePool";
+import { Ipool } from "@/contexts/SavePollContext";
 
 type props = {
   canCreate: boolean;
@@ -18,16 +20,23 @@ export default function Arrows({
   setFirstClick,
 }: props) {
   const [arrows, setArrows] = useState<ArrowProps[]>([]);
-
+  const saveArrow = useSaveArrowPool();
   function createArrow() {
     if (!currentMouse || !firstClick) return;
-    setArrows((prev) => [
-      ...prev,
-      {
-        endPoint: { x: currentMouse.left, y: currentMouse.top },
-        startPoint: { x: firstClick.left, y: firstClick.top },
-      },
-    ]);
+    const properties = {
+      endPointX: currentMouse.left,
+      endPointY: currentMouse.top,
+      startPointX: firstClick.left,
+      startPointY: firstClick.top,
+    };
+    const endPointX = currentMouse.left;
+    const endPointY = currentMouse.top;
+    const startPointX = firstClick.left;
+    const startPointY = firstClick.top;
+    setArrows((prev) => [...prev, properties]);
+    saveArrow({
+      properties: [properties],
+    });
     setCurrentMouse(null);
     setFirstClick(null);
   }
@@ -39,13 +48,18 @@ export default function Arrows({
           onClick={createArrow}
         >
           <Arrow
-            startPoint={{ x: firstClick.left, y: firstClick.top }}
-            endPoint={{ x: currentMouse.left, y: currentMouse.top }}
+            startPointX={firstClick.left}
+            startPointY={firstClick.top}
+            endPointX={currentMouse.left}
+            endPointY={currentMouse.top}
           />
         </div>
       )}
-      {arrows.map(({ startPoint, endPoint }, i) => (
-        <Arrow key={i} startPoint={startPoint} endPoint={endPoint} />
+      {/* {arrows.map(({ startPointX, startPointY, endPointX, endPointY }, i) => (
+        <Arrow key={i} startPointX={startPoint} endPoint={endPoint} />
+      ))} */}
+      {arrows.map((props, i) => (
+        <Arrow key={i} {...props} />
       ))}
     </>
   );
